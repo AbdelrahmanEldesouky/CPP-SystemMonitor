@@ -23,7 +23,7 @@ float Process::CpuUtilization() const {
   auto used_t = LinuxParser::ActiveJiffies(pid_);
   auto total_t = LinuxParser::UpTime() - LinuxParser::UpTime(pid_);
 
-  return float(used_t) / float(total_t);
+  return (float(used_t) / sysconf(_SC_CLK_TCK)) / float(total_t); ;
 }
 
 // TODO: Return the command that generated this process

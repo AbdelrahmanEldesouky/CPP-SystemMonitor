@@ -24,7 +24,7 @@ string LinuxParser::OperatingSystem() {
       std::replace(line.begin(), line.end(), '"', ' ');
       std::istringstream linestream(line);
       while (linestream >> key >> value) {
-        if (key == "PRETTY_NAME") {
+        if (key == LinuxParser::kFilterOS) {
           std::replace(value.begin(), value.end(), '_', ' ');
           return value;
         }
@@ -80,10 +80,10 @@ float LinuxParser::MemoryUtilization() {
     while (std::getline(filestream, line)) {
       std::istringstream linestream(line);
       if (linestream >> key >> value) {
-        if (key == "MemTotal:") {
+        if (key == LinuxParser::kFilterMemTotal) {
           mem_total = std::stof(value);
         }
-        if (key == "MemFree:") {
+        if (key == LinuxParser::kFilterMemFree) {
           mem_free = std::stof(value);
         }
         if (mem_free > 0.0 && mem_total > 0.0) {
@@ -178,7 +178,7 @@ vector<string> LinuxParser::CpuUtilization() {
     while (std::getline(filestream, line)) {
       std::istringstream linestream(line);
       if (linestream >> key) {
-        if (key == "cpu") {
+        if (key == LinuxParser::kFilterCpu) {
           std::string jiffie;
           while (linestream >> jiffie) {
             cpu_utilization.push_back(jiffie);
@@ -201,7 +201,7 @@ int LinuxParser::TotalProcesses() {
       std::istringstream linestream(line);
       std::string key;
       if (linestream >> key) {
-        if (key == "processes") {
+        if (key == LinuxParser::kFilterProcesses) {
           std::string value;
           linestream >> value;
           processes = std::stoi(value);
@@ -223,7 +223,7 @@ int LinuxParser::RunningProcesses() {
       std::istringstream linestream(line);
       std::string key;
       if (linestream >> key) {
-        if (key == "procs_running") {
+        if (key == LinuxParser::kFilterRunningProcesses) {
           std::string value;
           linestream >> value;
           running_processes = std::stoi(value);
@@ -259,7 +259,7 @@ string LinuxParser::Ram(int pid) {
       std::istringstream linestream(line);
       std::string key;
       if (linestream >> key) {
-        if (key == "VmSize:") {
+        if (key == LinuxParser::kFilterProcMem) {
           std::string value;
           linestream >> value;
           pid_ram = std::to_string((std::stol(value) / 1024));
@@ -283,7 +283,7 @@ string LinuxParser::Uid(int pid) {
       std::istringstream linestream(line);
       std::string key;
       if (linestream >> key) {
-        if (key == "Uid:") {
+        if (key == LinuxParser::kFilterUid) {
           std::string value;
           linestream >> value;
           uid = value;
