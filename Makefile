@@ -12,6 +12,9 @@ build:
 	cmake .. && \
 	make
 
+run: 
+	./build/monitor
+
 .PHONY: debug
 debug:
 	mkdir -p build
